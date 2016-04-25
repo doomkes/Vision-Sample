@@ -2,7 +2,7 @@
 #include <vector>
 #include <cmath>
 
-PWM runGunLight(9);
+
 
 /**
  * Example of finding yellow totes based on retroreflective target.
@@ -38,8 +38,6 @@ class VisionRetro2015Sample : public SampleRobot
 	Image *binaryFrame, *sm_template, *shapesImage;
 	ShapeReport *sr = NULL;
 	int imaqError;
-
-
 
 	//Constants
 	Range RING_HUE_RANGE = {80,131};	//Default hue range for ring light
@@ -77,12 +75,16 @@ public:
 
 	void Autonomous() override {
 		int numMatches;
+		PWM runGunLight(9);
+
 		while (IsAutonomous() && IsEnabled())
 		{
-			runGunLight.SetRaw(0.7*256); // 70 percent
+
+			runGunLight.SetRaw(65000);
+
 			//read file in from disk. For this example to run you need to copy image.jpg from the SampleImages folder to the
 			//directory shown below using FTP or SFTP: http://wpilib.screenstepslive.com/s/4485/m/24166/l/282299-roborio-ftp
-			imaqError = imaqReadFile(frame, "//home//lvuser//Templates//tower.jpg", NULL, NULL);
+			imaqError = imaqReadFile(frame, "//home//lvuser//Templates//BVC Tower capture 3.jpg", NULL, NULL);
 			//imaqError = imaqReadFile(frame, "//media//sda1//Templates//test.jpg", NULL, NULL);
 			if (!imaqError) printf ("%i: Error reading tower image \n",imaqError);
 			imaqError = imaqReadFile(sm_template, "//home//lvuser//Templates//2016_tower21.png", NULL, NULL);
@@ -118,7 +120,7 @@ public:
 
 			Wait(0.005);				// wait for a motor update time
 		}
-		runGunLight.SetRaw(0.2*256); // 20 percent
+		runGunLight.SetRaw(255); // 20 percent
 	}
 
 	void OperatorControl() override {
